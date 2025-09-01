@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أدوات التداول</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #ffffff;
+            background-color: #0d1a26;
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMDAnIGhlaWdodD0nMTAwJyB2aWV3Qm94PScwIDAgMTAwIDEwMCc+CiAgPHRleHQgeD0nNTAnJyB5PSc1MCUnIGRvbWluYW5uYmFzZWxpbmU9J21pZGRsZScgdGV4dC1hbmNob3I9J21pZGRsZScgZm9udC1mYW1pbHk9J3NhbnMtc2VyaWYnIGZvbnQtc2l6ZT0nNjAnIGZpbGw9JyNmZmZmZmYnIG9wYWNpdHk9JzAuMTUnPuKAmzwvdGV4dD4KPC9zdmc+");
+            background-size: 100px 100px, cover;
+            background-repeat: repeat;
+            background-attachment: fixed;
+        }
+        .container {
+            direction: rtl;
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 5px solid transparent;
+            border-image: linear-gradient(45deg, #1d4ed8, #4f46e5, #8b5cf6, #c084fc) 1;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .btn {
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .input-field {
+            transition: box-shadow 0.2s;
+            background-color: #1f2937;
+            color: #ffffff;
+            border-color: #4b5563;
+        }
+        .input-field:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        }
+        #profit-log li {
+            padding: 12px;
+            border-bottom: 1px solid #4b5563;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+        }
+        @media (min-width: 640px) {
+            #profit-log li {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+        #profit-log li:last-child {
+            border-bottom: none;
+        }
+        #profit-log li:nth-child(odd) {
+            background-color: rgba(31, 41, 55, 0.8);
+        }
+        #profit-log li:nth-child(even) {
+            background-color: rgba(17, 24, 39, 0.8);
+        }
+        .editable-date {
+            min-width: 120px;
+            text-align: center;
+            color: #d1d5db;
+        }
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.25rem;
+        }
+        .feature-box {
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 2px solid;
+        }
+        .stats-box { border-color: #34d399; }
+        .total-profit-box { border-color: #f59e0b; }
+        .log-box { border-color: #60a5fa; }
+        .goal-box { border-color: #a855f7; }
+        .calculator-box { border-color: #f87171; }
+        #duaa-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 2px solid #10b981;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 500;
+            color: #10b981;
+            font-size: 1rem;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        #duaa-text {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .fade-in-out {
+            animation: fade 5s infinite;
+        }
+        @keyframes fade {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .animated-logo {
+            font-size: 3rem;
+            font-weight: 900;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(45deg, #1d4ed8, #4f46e5, #8b5cf6, #c084fc);
+            animation: move-gradient 3s linear infinite;
+            border: 3px solid;
+            border-image: linear-gradient(45deg, #1d4ed8, #4f46e5, #8b5cf6, #c084fc) 1;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            display: inline-block;
+        }
+        @keyframes move-gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        .crypto-price-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        /* New styles for separated date and time boxes */
+        .header-datetime {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .datetime-box {
+            border: 2px solid #ef4444;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ef4444;
+            min-width: 120px;
+            text-align: center;
+        }
+        /* Style for the news section */
+        #news-section .news-item {
+            padding: 1rem;
+            border-bottom: 1px solid #4b5563;
+        }
+        #news-section .news-item:last-child {
+            border-bottom: none;
+        }
+        #news-section .news-title {
+            font-weight: bold;
+            color: #c084fc;
+        }
+        #news-section .news-link {
+            color: #60a5fa;
+            text-decoration: underline;
+        }
+        /* Styles for the trading performance tool */
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1f2937;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            text-align: center;
+            color: #fff;
+        }
+        .message-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+        }
+        #trading-tool-container {
+            background-color: rgba(31, 41, 55, 0.8);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            border-image: linear-gradient(45deg, #1d4ed8, #4f46e5, #8b5cf6, #c084fc) 1;
+            border: 5px solid transparent;
+        }
+        #trading-tool-container .bg-gray-50 {
+            background-color: #1f2937;
+        }
+        #trading-tool-container .text-gray-800 {
+            color: #e5e7eb;
+        }
+        #trading-tool-container .text-gray-600 {
+            color: #9ca3af;
+        }
+        #trading-tool-container .bg-white {
+            background-color: #1f2937;
+        }
+        #tradesTable thead {
+            background-color: #374151;
+            color: #d1d5db;
+        }
+        #tradesTable tbody tr.win-row {
+            background-color: #1a5c37;
+        }
+        #tradesTable tbody tr.loss-row {
+            background-color: #7b1d1d;
+        }
+        #tradesTable tbody tr.inconclusive-row {
+            background-color: #4b5563;
+        }
+        #tradesTable tbody tr.open-row {
+            background-color: #1e3a8a;
+        }
+        #tradesTable tbody tr:hover {
+            background-color: #374151;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- Custom Message Box -->
+    <div id="message-container" class="hidden">
+        <div class="message-overlay"></div>
+        <div class="message-box">
+            <p id="message-text" class="text-gray-800 text-lg mb-4"></p>
+            <div class="flex justify-center space-x-4">
+                <button id="message-confirm-btn" class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 font-bold transition duration-150 ease-in-out">تأكيد</button>
+                <button id="message-cancel-btn" class="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 font-bold transition duration-150 ease-in-out">إلغاء</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Container -->
+    <div class="container p-6 md:p-10 rounded-3xl shadow-lg w-full max-w-4xl text-center card">
+        <!-- Header Section with Logo, Clock, and Duaa -->
+        <div class="flex flex-col md:flex-row items-center justify-between mb-4">
+            <!-- BOOSH Logo Section -->
+            <div class="flex items-center justify-center mb-4 md:mb-0">
+                <h1 class="animated-logo text-3xl md:text-4xl">BOOSH</h1>
+            </div>
+            
+            <!-- Separated Date and Time boxes -->
+            <div class="header-datetime justify-center">
+                <div id="arabic-date" class="datetime-box"></div>
+                <div id="arabic-time" class="datetime-box"></div>
+            </div>
+        </div>
+        
+        <!-- Animated Duaa Box (displays a random supplication) -->
+        <div id="duaa-box">
+            <span id="duaa-text"></span>
+        </div>
+        
+        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-100">حاسبة الأرباح التراكمية 📊</h2>
+        <p class="text-gray-300 mb-8">أدخل رأس مالك الأولي ونسبة ربحك أو خسارتك اليومية لمتابعة نمو أصولك.</p>
+        
+        <hr class="my-8 border-gray-600">
+
+        <!-- Percentage Calculator Section -->
+        <div class="space-y-4 mt-8 mb-8 percentage-calculator-section">
+            <h3 class="text-xl font-semibold text-gray-100">حاسبة النسبة المئوية ٪</h3>
+            <div class="bg-gray-900 rounded-lg p-4">
+                <div class="space-y-4">
+                    <div class="flex flex-col items-start text-right">
+                        <label for="initial-amount" class="text-sm font-medium text-gray-400 mb-1">رأس المال الأولي (USDT):</label>
+                        <input type="number" id="initial-amount" placeholder="مثال: 133.25" class="input-field w-full px-4 py-3 rounded-lg border-2 bg-gray-800 text-white border-gray-700 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col items-start text-right">
+                        <label for="profit-loss-amount" class="text-sm font-medium text-gray-400 mb-1">مبلغ الربح أو الخسارة (USDT):</label>
+                        <input type="number" id="profit-loss-amount" placeholder="مثال: 10 للربح، -5 للخسارة" class="input-field w-full px-4 py-3 rounded-lg border-2 bg-gray-800 text-white border-gray-700 focus:border-blue-500">
+                    </div>
+                    <button id="calculate-percentage-btn" class="btn w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-md">
+                        حساب النسبة
+                    </button>
+                    <div class="text-center mt-4">
+                        <p id="percentage-result" class="text-2xl font-bold text-green-500">0.00 %</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="my-8 border-gray-600">
+
+        <!-- Daily Profit Calculator Section -->
+        <div class="space-y-6">
+            <div class="flex flex-col items-start text-right">
+                <label for="initial-capital" class="text-sm font-medium text-gray-400 mb-1">رأس المال الأولي (USDT):</label>
+                <input type="number" id="initial-capital" value="500" class="input-field w-full px-4 py-3 rounded-lg border-2 bg-gray-800 text-white border-gray-700 focus:border-blue-500">
+            </div>
+
+            <div class="flex flex-col items-start text-right">
+                <label for="daily-profit" class="text-sm font-medium text-gray-400 mb-1">الربح أو الخسارة اليومية (بالنسبة المئوية):</label>
+                <input type="number" id="daily-profit" placeholder="مثال: 1.5 للربح و -2 للخسارة" class="input-field w-full px-4 py-3 rounded-lg border-2 bg-gray-800 text-white border-gray-700 focus:border-blue-500">
+            </div>
+
+            <button id="calculate-btn" class="btn w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-md">
+                حساب التحديث
+            </button>
+            <div class="flex justify-between space-x-2 space-x-reverse mt-4">
+                <button id="undo-btn" class="btn flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow-md">
+                    تراجع
+                </button>
+                <button id="clear-all-btn" class="btn flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 rounded-xl shadow-md">
+                    حذف الكل
+                </button>
+                <!-- New button to export data -->
+                <button id="export-csv-btn" class="btn flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl shadow-md">
+                    تصدير إلى CSV
+                </button>
+            </div>
+        </div>
+
+        <hr class="my-8 border-gray-600">
+
+        <!-- Financial Stats Section -->
+        <div>
+            <div class="text-left space-y-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-100">رأس المال الحالي:</h3>
+                    <p id="current-capital" class="text-2xl font-bold text-green-600 mt-1">500.00 USDT</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-100">الربح المستهدف لليوم القادم (1%):</h3>
+                    <p id="daily-target" class="text-2xl font-bold text-blue-600 mt-1">5.00 USDT</p>
+                </div>
+            </div>
+
+            <!-- Added new stats section -->
+            <hr class="my-8 border-gray-600">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-100">إجمالي الأيام:</h3>
+                    <p id="total-days" class="text-2xl font-bold mt-1 text-gray-300">0</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-100">عدد العمليات:</h3>
+                    <p id="total-transactions" class="text-2xl font-bold mt-1 text-gray-300">0</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-100">متوسط الربح/الخسارة:</h3>
+                    <p id="average-profit" class="text-2xl font-bold mt-1 text-gray-300">0.00%</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Profit/Loss Section -->
+        <div>
+            <div class="text-left space-y-4">
+                <hr class="my-8 border-gray-600">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-100">إجمالي الربح / الخسارة:</h3>
+                    <p id="total-profit-loss" class="text-2xl font-bold text-green-600 mt-1">0.00 USDT</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Daily Log Section -->
+        <div>
+            <div class="text-left">
+                <hr class="my-8 border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-100 mb-4">سجل العمليات اليومية:</h3>
+                <ul id="profit-log" class="bg-gray-900 rounded-lg p-2 overflow-y-auto max-h-64 border border-gray-700">
+                    <!-- Log entries will be added here -->
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Goal Setting Section -->
+        <div class="mb-8">
+            <div class="text-left">
+                <hr class="my-8 border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-100 mb-4">تحقيق الهدف 🎯</h3>
+                <p class="text-gray-300 mb-4">أدخل رأس المال المستهدف لمعرفة عدد الأيام التي قد تحتاجها.</p>
+                <div class="flex items-center space-x-2 space-x-reverse bg-gray-900 p-4 rounded-lg">
+                    <input type="number" id="goal-input" class="flex-1 input-field px-4 py-2 rounded-lg border-2 bg-gray-800 text-white border-gray-700 focus:border-blue-500" placeholder="مثال: 1000">
+                    <button id="calculate-goal-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-xl shadow-md">
+                        احسب الأيام
+                    </button>
+                </div>
+                <p id="goal-result" class="text-right text-lg font-bold mt-2 text-purple-700">النتيجة: أدخل هدفك أولاً</p>
+            </div>
+        </div>
+
+        <!-- Simple Calculator Section -->
+        <div class="mb-8">
+            <div class="text-left">
+                <hr class="my-8 border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-100 mb-4">حاسبة سريعة 🧮</h3>
+                <div class="bg-gray-900 p-3 rounded-lg w-full max-w-xs mx-auto">
+                    <input type="text" id="calc-display" class="w-full text-3xl text-right p-2 mb-4 rounded-lg border-2 bg-gray-800 text-white border-gray-700 font-mono focus:border-blue-500" value="0" readonly>
+                    <div class="calculator-grid">
+                        <button class="btn bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-lg" data-value="7">7</button>
+                        <button class="btn bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-lg" data-value="8">8</button>
+                        <button class="btn bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-lg" data-value="9">9</button>
+                        <button class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg" data-value="/">÷</button>
+                        
+                        <button class="btn bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-lg" data-value="4">4</button>
+                        <button class="btn bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-lg" data-value="5">5</button>
+                        <button class="btn bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-lg" data-value="6">6</button>
+                        <button class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg" data-value="*">×</button>
+                        
+                        <button class="btn bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-lg" data-value="1">1</button>
+                        <button class="btn bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-lg" data-value="2">2</button>
+                        <button class="btn bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-lg" data-value="3">3</button>
+                        <button class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg" data-value="-">-</button>
+                        
+                        <button class="btn bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-lg" data-value="0">0</button>
+                        <button class="btn bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 rounded-lg" data-value=".">.</button>
+                        <button class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg" data-value="+">+</button>
+                        <button id="clear-calc-btn" class="btn bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-lg">C</button>
+                        <button id="calculate-expression-btn" class="btn w-full col-span-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-md mt-2">
+                            =
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- New Trade Profit Calculator Section -->
+        <div class="space-y-4 mt-8 mb-8 trade-profit-section">
+            <h3 class="text-xl font-semibold text-gray-100">حاسبة ربح الصفقة 📈</h3>
+            <div class="bg-gray-900 rounded-lg p-4">
+                <div class="flex justify-between mb-4">
+                    <button id="buy-btn" class="flex-1 py-2 px-4 rounded-lg font-bold bg-green-600 text-white">
+                        شراء
+                    </button>
+                    <button id="sell-btn" class="flex-1 py-2 px-4 rounded-lg font-bold bg-gray-700 text-white">
+                        بيع
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <label for="leverage-input" class="text-sm font-medium text-gray-400">الرافعة المالية:</label>
+                    <input type="text" id="leverage-input" value="20x" class="input-field w-full px-4 py-2 rounded-lg border-2 bg-gray-800 text-white border-gray-700 focus:border-blue-500 text-center">
+                </div>
+                <div class="space-y-4">
+                    <div class="flex flex-col items-start text-right">
+                        <label for="entry-price" class="text-sm font-medium text-gray-400 mb-1">سعر الدخول (USDT):</label>
+                        <input type="number" id="entry-price" placeholder="سعر الدخول" class="input-field w-full px-4 py-3 rounded-lg border-2 bg-gray-800 text-white border-gray-700 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col items-start text-right">
+                        <label for="exit-price" class="text-sm font-medium text-gray-400 mb-1">سعر الخروج (USDT):</label>
+                        <input type="number" id="exit-price" placeholder="سعر الخروج" class="input-field w-full px-4 py-3 rounded-lg border-2 bg-gray-800 text-white border-gray-700 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col items-start text-right">
+                        <label for="quantity-input" class="text-sm font-medium text-gray-400 mb-1">الكمية (USDT):</label>
+                        <input type="number" id="quantity-input" placeholder="مثال: 1000" class="input-field w-full px-4 py-3 rounded-lg border-2 bg-gray-800 text-white border-gray-700 focus:border-blue-500">
+                    </div>
+                    <button id="calculate-trade-btn" class="btn w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 rounded-xl shadow-md">
+                        حساب الربح
+                    </button>
+                    <div class="text-center mt-4">
+                        <p id="trade-result-amount" class="text-2xl font-bold text-green-500">الربح/الخسارة: 0.00 USDT</p>
+                        <p id="trade-result-percentage" class="text-xl text-gray-400">العائد على الاستثمار: 0.00 %</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- New Quantity Calculator Section -->
+        <div class="space-y-4 mt-8 mb-8 quantity-calculator-section">
+            <h3 class="text-xl font-semibold text-gray-100">حاسبة كمية العملة 💰</h3>
+            <div class="bg-gray-900 rounded-lg p-4">
+                <div class="space-y-4">
+                    <div class="flex flex-col items-start text-right">
+                        <label for="crypto-symbol-input" class="text-sm font-medium text-gray-400 mb-1">رمز العملة (مثال: BTC, ETH):</label>
+                        <input type="text" id="crypto-symbol-input" placeholder="رمز العملة" class="input-field w-full px-4 py-3 rounded-lg border-2 bg-gray-800 text-white border-gray-700 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col items-start text-right">
+                        <label for="current-price-input" class="text-sm font-medium text-gray-400 mb-1">سعر العملة الحالي (USDT):</label>
+                        <input type="number" id="current-price-input" placeholder="مثال: 60000" class="input-field w-full px-4 py-3 rounded-lg border-2 bg-gray-800 text-white border-gray-700 focus:border-blue-500">
+                    </div>
+                    <div class="flex flex-col items-start text-right">
+                        <label for="available-capital-input" class="text-sm font-medium text-gray-400 mb-1">رأس المال المتاح (USDT):</label>
+                        <input type="number" id="available-capital-input" placeholder="مثال: 130" class="input-field w-full px-4 py-3 rounded-lg border-2 bg-gray-800 text-white border-gray-700 focus:border-blue-500">
+                    </div>
+                    <button id="calculate-quantity-btn" class="btn w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 rounded-xl shadow-md">
+                        حساب الكمية
+                    </button>
+                    <div class="text-center mt-4">
+                        <p id="quantity-result" class="text-2xl font-bold text-green-500">الكمية: 0.00000000</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trading Performance Section -->
+        <hr class="my-8 border-gray-600">
+        <div id="trading-tool-container" class="mx-auto p-6 rounded-2xl shadow-xl">
+            <h1 class="text-3xl font-bold text-center mb-4 text-gray-100">أداة تحليل الصفقات</h1>
+            <p class="text-center text-gray-300 mb-6">احسب مدى فعالية توصيات الذكاء الاصطناعي</p>
+
+            <div class="space-y-4 mb-6">
+                <!-- Form Inputs -->
+                <div>
+                    <label for="tradeType" class="block text-sm font-medium text-gray-400">نوع الصفقة:</label>
+                    <select id="tradeType" class="mt-1 block w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-800 text-white">
+                        <option value="buy">شراء</option>
+                        <option value="sell">بيع</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="entryPrice" class="block text-sm font-medium text-gray-400">سعر الدخول:</label>
+                    <input type="number" id="entryPrice" class="mt-1 block w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-800 text-white" placeholder="أدخل سعر الدخول">
+                </div>
+                <div>
+                    <label for="targetPrice" class="block text-sm font-medium text-gray-400">سعر الهدف:</label>
+                    <input type="number" id="targetPrice" class="mt-1 block w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-800 text-white" placeholder="أدخل سعر الهدف">
+                </div>
+                <div>
+                    <label for="stopLossPrice" class="block text-sm font-medium text-gray-400">سعر وقف الخسارة:</label>
+                    <input type="number" id="stopLossPrice" class="mt-1 block w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-800 text-white" placeholder="أدخل سعر وقف الخسارة">
+                </div>
+                
+                <button onclick="addTrade()" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out font-bold">
+                    ابدأ الصفقة
+                </button>
+            </div>
+
+            <!-- Live Trade Section -->
+            <div id="liveTradeSection" class="hidden text-center mb-6 p-4 rounded-xl bg-gray-800 shadow-inner">
+                <h2 class="text-xl font-bold text-gray-100">الصفقة الحالية</h2>
+                <p class="text-sm text-gray-400 mb-2">قم بزيادة أو تقليل السعر لمحاكاة حركة السوق</p>
+                <div class="flex items-center justify-center my-4">
+                    <button onclick="updateCurrentPrice(-1)" class="bg-gray-700 text-gray-100 rounded-md p-2 hover:bg-gray-600 font-bold text-2xl">-</button>
+                    <span id="currentPriceDisplay" class="mx-6 text-3xl font-bold text-indigo-400 min-w-[100px]">0</span>
+                    <button onclick="updateCurrentPrice(1)" class="bg-gray-700 text-gray-100 rounded-md p-2 hover:bg-gray-600 font-bold text-2xl">+</button>
+                </div>
+                <button onclick="closeTrade()" class="w-full bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-400 transition duration-150 ease-in-out font-bold">
+                    أغلق الصفقة
+                </button>
+            </div>
+
+            <!-- Summary Section -->
+            <div class="flex flex-col md:flex-row items-center justify-between mb-6 p-4 rounded-xl bg-gray-800 shadow-inner">
+                <div class="text-center md:text-right flex-1 mb-2 md:mb-0">
+                    <p class="text-xl font-semibold text-gray-100">إجمالي الصفقات: <span id="totalTrades" class="text-2xl font-bold text-indigo-400">0</span></p>
+                </div>
+                <div class="text-center md:text-right flex-1 mb-2 md:mb-0">
+                    <p class="text-xl font-semibold text-gray-100">الصفقات الرابحة: <span id="winningTrades" class="text-2xl font-bold text-green-400">0</span></p>
+                </div>
+                <div class="text-center md:text-right flex-1 mb-2 md:mb-0">
+                    <p class="text-xl font-semibold text-gray-100">نسبة النجاح: <span id="successRate" class="text-2xl font-bold text-indigo-400">0%</span></p>
+                </div>
+                <div class="text-center md:text-right flex-1">
+                    <p class="text-xl font-semibold text-gray-100">الصفقات الخاسرة: <span id="losingTrades" class="text-2xl font-bold text-red-400">0</span></p>
+                </div>
+            </div>
+
+            <!-- Trades Table -->
+            <div class="bg-gray-800 rounded-lg p-4">
+                <h2 class="text-lg font-bold mb-4 text-gray-100">سجل الصفقات</h2>
+                <div class="overflow-x-auto">
+                    <table id="tradesTable" class="min-w-full table-auto text-sm border-collapse">
+                        <thead>
+                            <tr class="bg-gray-700 text-gray-300 uppercase text-xs">
+                                <th class="py-3 px-6 text-right font-medium">النوع</th>
+                                <th class="py-3 px-6 text-right font-medium">سعر الدخول</th>
+                                <th class="py-3 px-6 text-right font-medium">سعر الهدف</th>
+                                <th class="py-3 px-6 text-right font-medium">سعر وقف الخسارة</th>
+                                <th class="py-3 px-6 text-right font-medium">سعر الإغلاق</th>
+                                <th class="py-3 px-6 text-right font-medium">النتيجة</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-300 text-sm font-light">
+                            <!-- Trades will be added here dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <button onclick="showConfirmDialog()" class="mt-6 w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition duration-150 ease-in-out font-bold">
+                مسح البيانات
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Get references to all HTML elements
+        const initialCapitalInput = document.getElementById('initial-capital');
+        const dailyProfitInput = document.getElementById('daily-profit');
+        const calculateBtn = document.getElementById('calculate-btn');
+        const undoBtn = document.getElementById('undo-btn');
+        const clearAllBtn = document.getElementById('clear-all-btn');
+        const exportCsvBtn = document.getElementById('export-csv-btn');
+        const currentCapitalDisplay = document.getElementById('current-capital');
+        const dailyTargetDisplay = document.getElementById('daily-target');
+        const profitLog = document.getElementById('profit-log');
+        const totalProfitLossDisplay = document.getElementById('total-profit-loss');
+        const totalDaysDisplay = document.getElementById('total-days');
+        const totalTransactionsDisplay = document.getElementById('total-transactions');
+        const averageProfitDisplay = document.getElementById('average-profit');
+        const goalInput = document.getElementById('goal-input');
+        const calculateGoalBtn = document.getElementById('calculate-goal-btn');
+        const goalResult = document.getElementById('goal-result');
+        const calcDisplay = document.getElementById('calc-display');
+        const calculatorGrid = document.querySelector('.calculator-grid');
+        const clearCalcBtn = document.getElementById('clear-calc-btn');
+        const calculateExpressionBtn = document.getElementById('calculate-expression-btn');
+        const duaaText = document.getElementById('duaa-text');
+        const arabicDateElement = document.getElementById('arabic-date');
+        const arabicTimeElement = document.getElementById('arabic-time');
+        
+        // References for the trade profit calculator
+        const buyBtn = document.getElementById('buy-btn');
+        const sellBtn = document.getElementById('sell-btn');
+        const entryPriceInput = document.getElementById('entry-price');
+        const exitPriceInput = document.getElementById('exit-price');
+        const quantityInput = document.getElementById('quantity-input');
+        const calculateTradeBtn = document.getElementById('calculate-trade-btn');
+        const tradeResultAmount = document.getElementById('trade-result-amount');
+        const tradeResultPercentage = document.getElementById('trade-result-percentage');
+        const leverageInput = document.getElementById('leverage-input');
+        
+        let tradeType = 'buy';
+
+        // References for the percentage calculator
+        const initialAmountInput = document.getElementById('initial-amount');
+        const profitLossAmountInput = document.getElementById('profit-loss-amount');
+        const calculatePercentageBtn = document.getElementById('calculate-percentage-btn');
+        const percentageResultDisplay = document.getElementById('percentage-result');
+        
+        // References for the new quantity calculator
+        const cryptoSymbolInput = document.getElementById('crypto-symbol-input');
+        const currentPriceInput = document.getElementById('current-price-input');
+        const availableCapitalInput = document.getElementById('available-capital-input');
+        const calculateQuantityBtn = document.getElementById('calculate-quantity-btn');
+        const quantityResultDisplay = document.getElementById('quantity-result');
+
+        // State variables for the current capital and a history of transactions
+        let currentCapital;
+        let transactionHistory = [];
+
+        // Array of Islamic supplications (Duas) for a positive touch
+        const duas = [
+            "اللهم إني أسألك رزقًا طيبًا ومالًا حلالًا وعلمًا نافعًا وعملًا متقبلاً.",
+            "اللهم اكفني بحلالك عن حرامك وأغنني بفضلك عمن سواك.",
+            "اللهم بارك لنا في أرزاقنا واجعلها خيرًا لنا في الدنيا والآخرة.",
+            "اللهم ارزقني من حيث لا أحتسب.",
+            "رب زدني مالًا وعلماً.",
+            "اللهم إني أسألك خيرًا كثيرًا وبركةً دائمةً.",
+            "اللهم اجعل تداولي بركةً وخيرًا لي.",
+            "اللهم افتح لي أبواب رزقك ويسر لي أمري.",
+            "اللهم اجعل هذا اليوم يوم ربح وخير لي وللمسلمين."
+        ];
+        
+        /**
+         * Loads data from Local Storage on initial page load.
+         */
+        function loadData() {
+            const savedData = localStorage.getItem('crypto_profit_data');
+            const savedInitialCapital = localStorage.getItem('initial_capital');
+
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                // Convert date strings back to Date objects
+                transactionHistory = data.history.map(t => ({
+                    ...t,
+                    date: new Date(t.date)
+                }));
+            }
+            if (savedInitialCapital) {
+                initialCapitalInput.value = savedInitialCapital;
+            }
+            
+            // Set initial value for currentCapital and update display
+            currentCapital = parseFloat(initialCapitalInput.value);
+            renderLog();
+            updateDisplay();
+            updateDateTime(); // Call the combined date/time function on load
+            setInterval(updateDateTime, 1000); // Update every second
+            updateDuaa(); // Call the Duaa function on load
+            setInterval(updateDuaa, 10000); // Update Duaa every 10 seconds
+        }
+        
+        /**
+         * Saves data to Local Storage.
+         */
+        function saveData() {
+            const data = {
+                initialCapital: parseFloat(initialCapitalInput.value),
+                history: transactionHistory
+            };
+            localStorage.setItem('crypto_profit_data', JSON.stringify(data));
+            localStorage.setItem('initial_capital', initialCapitalInput.value);
+        }
+
+        /**
+         * Updates the display for current capital, daily target, and total profit/loss.
+         * This function recalculates values based on the current transaction history.
+         */
+        function updateDisplay() {
+            // Recalculate current capital from history
+            let tempCapital = parseFloat(initialCapitalInput.value);
+            transactionHistory.forEach(t => {
+                tempCapital += tempCapital * (t.profitPercentage / 100);
+            });
+            currentCapital = tempCapital;
+
+            currentCapitalDisplay.innerText = `${currentCapital.toFixed(2)} USDT`;
+            const dailyTarget = currentCapital * 0.01; // 1%
+            dailyTargetDisplay.innerText = `${dailyTarget.toFixed(2)} USDT`;
+
+            // Calculate total profit/loss
+            const totalProfitLoss = currentCapital - parseFloat(initialCapitalInput.value);
+            totalProfitLossDisplay.innerText = `${totalProfitLoss.toFixed(2)} USDT`;
+            totalProfitLossDisplay.classList.remove('text-green-600', 'text-red-600', 'text-gray-600');
+            if (totalProfitLoss > 0) {
+                totalProfitLossDisplay.classList.add('text-green-600');
+            } else if (totalProfitLoss < 0) {
+                totalProfitLossDisplay.classList.add('text-red-600');
+            } else {
+                totalProfitLossDisplay.classList.add('text-gray-600');
+            }
+            
+            // Update stats
+            const uniqueDates = new Set(transactionHistory.map(t => new Date(t.date).toDateString()));
+            const totalTransactions = transactionHistory.length;
+            totalDaysDisplay.innerText = totalTransactions > 0 ? uniqueDates.size : 0;
+            totalTransactionsDisplay.innerText = totalTransactions;
+
+            const totalProfitPercentage = transactionHistory.reduce((sum, t) => sum + t.profitPercentage, 0);
+            const averageProfit = totalTransactions > 0 ? totalProfitPercentage / totalTransactions : 0;
+            averageProfitDisplay.innerText = `${averageProfit.toFixed(2)}%`;
+            averageProfitDisplay.classList.remove('text-green-600', 'text-red-600', 'text-gray-600');
+            if (averageProfit > 0) {
+                averageProfitDisplay.classList.add('text-green-600');
+            } else if (averageProfit < 0) {
+                averageProfitDisplay.classList.add('text-red-600');
+            } else {
+                averageProfitDisplay.classList.add('text-gray-600');
+            }
+        }
+
+        /**
+         * Calculates the profit/loss and updates the capital.
+         */
+        function calculateProfit() {
+            const dailyProfit = parseFloat(dailyProfitInput.value);
+
+            // Validate the input
+            if (isNaN(dailyProfit)) {
+                showMessage('الرجاء إدخال رقم صحيح لنسبة الربح أو الخسارة.');
+                return;
+            }
+            
+            // Add the transaction to history
+            transactionHistory.push({
+                date: new Date(),
+                profitPercentage: dailyProfit
+            });
+
+            // Re-render the entire log and save data
+            renderLog();
+            saveData();
+
+            // Update the display and clear the input field
+            updateDisplay();
+            dailyProfitInput.value = '';
+        }
+
+        /**
+         * Renders the log from the transaction history array.
+         */
+        function renderLog() {
+            profitLog.innerHTML = ''; // Clear existing log
+            
+            let tempCapital = parseFloat(initialCapitalInput.value);
+
+            transactionHistory.forEach((transaction, index) => {
+                const transactionDate = new Date(transaction.date);
+                const dateString = `${transactionDate.getFullYear()}-${String(transactionDate.getMonth() + 1).padStart(2, '0')}-${String(transactionDate.getDate()).padStart(2, '0')}`;
+                
+                const profitOrLossText = transaction.profitPercentage >= 0 ? 'ربح' : 'خسارة';
+                const colorClass = transaction.profitPercentage >= 0 ? 'text-green-700' : 'text-red-700';
+                
+                const profitAmount = tempCapital * (transaction.profitPercentage / 100);
+                tempCapital += profitAmount;
+
+                const listItem = document.createElement('li');
+                listItem.className = "p-2 border-b border-gray-200 text-gray-700 flex flex-col sm:flex-row sm:justify-between items-end sm:items-center w-full";
+                
+                listItem.innerHTML = `
+                    <div class="flex flex-col sm:flex-row items-end sm:items-center sm:space-x-4 sm:space-x-reverse mb-2 sm:mb-0">
+                        <span class="font-semibold text-gray-500 editable-date" contenteditable="true" data-index="${index}">${dateString}</span>
+                        <span class="font-semibold ${colorClass}">${profitOrLossText} اليوم: <span class="editable-profit" contenteditable="true" data-index="${index}">${transaction.profitPercentage}%</span></span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-end sm:items-center sm:space-x-4 sm:space-x-reverse text-sm">
+                        <span class="font-bold ${colorClass}">المبلغ: ${profitAmount.toFixed(2)} USDT</span>
+                        <span class="font-bold text-gray-800">رأس المال أصبح: ${tempCapital.toFixed(2)} USDT</span>
+                    </div>
+                `;
+                profitLog.appendChild(listItem);
+            });
+            profitLog.scrollTop = profitLog.scrollHeight;
+        }
+
+        /**
+         * Exports transaction history to a CSV file.
+         */
+        function exportToCsv() {
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Added BOM for Arabic characters
+            csvContent += "التاريخ,الربح/الخسارة%,رأس المال قبل,رأس المال بعد\n";
+
+            let tempCapital = parseFloat(initialCapitalInput.value);
+            transactionHistory.forEach(t => {
+                const profitAmount = tempCapital * (t.profitPercentage / 100);
+                const capitalBefore = tempCapital;
+                const capitalAfter = tempCapital + profitAmount;
+                tempCapital = capitalAfter;
+
+                const dateString = `${new Date(t.date).getFullYear()}-${String(new Date(t.date).getMonth() + 1).padStart(2, '0')}-${String(new Date(t.date).getDate()).padStart(2, '0')}`;
+                
+                const row = `${dateString},${t.profitPercentage}%,${capitalBefore.toFixed(2)},${capitalAfter.toFixed(2)}\n`;
+                csvContent += row;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "crypto_transactions.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // ---- Transaction Operations ----
+        function deleteTransaction(index) {
+            transactionHistory.splice(index, 1);
+            renderLog();
+            saveData();
+            updateDisplay();
+        }
+
+        function updateTransaction(index, newPercentageText) {
+            const newPercentage = parseFloat(newPercentageText.replace('%', ''));
+            if (!isNaN(newPercentage)) {
+                transactionHistory[index].profitPercentage = newPercentage;
+                renderLog();
+                saveData();
+                updateDisplay();
+            } else {
+                // The display will be re-rendered, so no need to revert text
+            }
+        }
+        
+        function updateDate(index, newDateText) {
+            const newDate = new Date(newDateText);
+            if (!isNaN(newDate.getTime())) {
+                transactionHistory[index].date = newDate;
+                saveData();
+            } else {
+                // The display will be re-rendered, so no need to revert text
+            }
+        }
+
+        function undoLastTransaction() {
+            if (transactionHistory.length > 0) {
+                transactionHistory.pop();
+                renderLog();
+                saveData();
+            } else {
+                showMessage('لا يوجد عمليات للتراجع عنها.');
+            }
+        }
+        
+        function showClearConfirmation() {
+            showMessage('هل أنت متأكد من أنك تريد مسح جميع العمليات؟', true, () => {
+                transactionHistory = [];
+                currentCapital = parseFloat(initialCapitalInput.value);
+                renderLog();
+                saveData();
+                updateDisplay();
+            });
+        }
+        
+        /**
+         * Custom message box functions
+         * @param {string} message - The message to display.
+         * @param {boolean} [isConfirm=false] - If true, displays confirm/cancel buttons.
+         * @param {function} [onConfirm] - Callback function for confirm button.
+         * @param {function} [onCancel] - Callback function for cancel button.
+         */
+        function showMessage(message, isConfirm = false, onConfirm, onCancel) {
+            const container = document.getElementById('message-container');
+            const text = document.getElementById('message-text');
+            const confirmBtn = document.getElementById('message-confirm-btn');
+            const cancelBtn = document.getElementById('message-cancel-btn');
+
+            text.textContent = message;
+            container.classList.remove('hidden');
+
+            if (isConfirm) {
+                confirmBtn.onclick = () => { container.classList.add('hidden'); if (onConfirm) onConfirm(); };
+                cancelBtn.onclick = () => { container.classList.add('hidden'); if (onCancel) onCancel(); };
+                confirmBtn.style.display = 'inline-block';
+                cancelBtn.style.display = 'inline-block';
+                confirmBtn.textContent = 'تأكيد';
+            } else {
+                confirmBtn.onclick = () => { container.classList.add('hidden'); };
+                cancelBtn.style.display = 'none';
+                confirmBtn.style.display = 'inline-block';
+                confirmBtn.textContent = 'موافق';
+            }
+        }
+
+        // ---- Mini Calculator Logic ----
+        function appendToDisplay(value) {
+            if (calcDisplay.value === '0' && value !== '.') {
+                calcDisplay.value = value;
+            } else {
+                calcDisplay.value += value;
+            }
+        }
+        function clearDisplay() {
+            calcDisplay.value = '0';
+        }
+        function calculateExpression() {
+            try {
+                let expression = calcDisplay.value;
+                expression = expression.replace(/×/g, '*').replace(/÷/g, '/');
+                const result = eval(expression);
+                if (!isNaN(result)) {
+                    calcDisplay.value = result;
+                } else {
+                    calcDisplay.value = 'خطأ';
+                }
+            } catch (e) {
+                calcDisplay.value = 'خطأ';
+            }
+        }
+
+        // ---- Goal Setting Logic ----
+        function calculateGoal() {
+            const target = parseFloat(goalInput.value);
+            const current = parseFloat(initialCapitalInput.value);
+            const totalTransactions = transactionHistory.length;
+            const totalProfitPercentage = transactionHistory.reduce((sum, t) => sum + t.profitPercentage, 0);
+            const averageRate = totalTransactions > 0 ? totalProfitPercentage / totalTransactions : 0;
+
+            if (isNaN(target) || isNaN(current) || current <= 0) {
+                goalResult.innerText = `الرجاء إدخال أرقام صحيحة لرأس المال المستهدف.`;
+                return;
+            }
+            if (totalTransactions === 0) {
+                goalResult.innerText = `الرجاء إضافة بعض العمليات أولاً لحساب متوسط الربح.`;
+                return;
+            }
+            if (averageRate <= 0) {
+                goalResult.innerText = `متوسط ربحك اليومي سلبي، لا يمكن الوصول إلى الهدف بهذا المعدل.`;
+                return;
+            }
+            if (target <= currentCapital) {
+                goalResult.innerText = `لقد وصلت إلى هدفك بالفعل! 🎉`;
+                return;
+            }
+
+            // Using the compound growth formula to estimate days
+            const growthFactor = 1 + (averageRate / 100);
+            let days = 0;
+            let tempCapital = currentCapital;
+
+            while (tempCapital < target && days < 1000) { // Limit days to prevent infinite loops
+                tempCapital *= growthFactor;
+                days++;
+            }
+            
+            if (days >= 1000) {
+                goalResult.innerText = `الوصول إلى هذا الهدف قد يستغرق وقتًا طويلاً جداً.`;
+            } else {
+                goalResult.innerText = `ستصل إلى ${target.toFixed(2)} USDT خلال ${days} يومًا تقريبًا.`;
+            }
+        }
+        
+        /**
+         * Function to update the date and time in separate boxes.
+         */
+        function updateDateTime() {
+            const now = new Date();
+            // Options for date format
+            const dateOptions = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            // Options for time format
+            const timeOptions = {
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                hour12: true
+            };
+            // Use 'en-US' locale to get English numbers for display
+            const dateString = now.toLocaleString('en-US', dateOptions);
+            const timeString = now.toLocaleString('en-US', timeOptions);
+            
+            arabicDateElement.innerText = dateString;
+            arabicTimeElement.innerText = timeString;
+        }
+        
+        /**
+         * Function to update the Duaa.
+         */
+        function updateDuaa() {
+            const randomIndex = Math.floor(Math.random() * duas.length);
+            duaaText.innerText = duas[randomIndex];
+        }
+        
+        // ---- Trade Profit Calculator Functions ----
+        function selectTradeType(type) {
+            tradeType = type;
+            if (type === 'buy') {
+                buyBtn.classList.add('bg-green-600');
+                buyBtn.classList.remove('bg-gray-700');
+                sellBtn.classList.add('bg-gray-700');
+                sellBtn.classList.remove('bg-red-600');
+            } else { // sell
+                sellBtn.classList.add('bg-red-600');
+                sellBtn.classList.remove('bg-gray-700');
+                buyBtn.classList.add('bg-gray-700');
+                buyBtn.classList.remove('bg-green-600');
+            }
+            calculateTradeResult();
+        }
+
+        function calculateTradeResult() {
+            const entryPrice = parseFloat(entryPriceInput.value);
+            const exitPrice = parseFloat(exitPriceInput.value);
+            const quantity = parseFloat(quantityInput.value);
+            const leverageText = leverageInput.value;
+            const leverage = parseFloat(leverageText.replace('x', ''));
+
+            if (isNaN(entryPrice) || isNaN(exitPrice) || isNaN(quantity) || isNaN(leverage) || entryPrice <= 0 || quantity <= 0 || leverage <= 0) {
+                tradeResultAmount.innerText = `الربح/الخسارة: 0.00 USDT`;
+                tradeResultPercentage.innerText = `العائد على الاستثمار: 0.00 %`;
+                tradeResultAmount.classList.remove('text-green-500', 'text-red-500');
+                tradeResultAmount.classList.add('text-green-500');
+                return;
+            }
+
+            let profitOrLoss;
+            
+            // Calculation is based on the difference in price multiplied by the quantity
+            if (tradeType === 'buy') {
+                profitOrLoss = (exitPrice - entryPrice) * quantity;
+            } else { // sell
+                profitOrLoss = (entryPrice - exitPrice) * quantity;
+            }
+            
+            // Apply leverage
+            const leveragedProfitOrLoss = profitOrLoss * leverage;
+
+            // Calculate the percentage profit
+            const initialCapital = entryPrice * quantity;
+            const profitPercentage = (leveragedProfitOrLoss / initialCapital) * 100;
+            
+            // Determine the color based on profit or loss
+            const colorClass = leveragedProfitOrLoss >= 0 ? 'text-green-500' : 'text-red-500';
+
+            tradeResultAmount.classList.remove('text-green-500', 'text-red-500');
+            tradeResultAmount.classList.add(colorClass);
+            tradeResultAmount.innerText = `الربح/الخسارة: ${leveragedProfitOrLoss.toFixed(2)} USDT`;
+            tradeResultPercentage.innerText = `العائد على الاستثمار: ${profitPercentage.toFixed(2)} %`;
+        }
+
+        // ---- Percentage Calculator Function ----
+        function calculatePercentage() {
+            const initialAmount = parseFloat(initialAmountInput.value);
+            const profitLossAmount = parseFloat(profitLossAmountInput.value);
+
+            if (isNaN(initialAmount) || initialAmount <= 0) {
+                percentageResultDisplay.innerText = `0.00 %`;
+                percentageResultDisplay.classList.remove('text-green-500', 'text-red-500');
+                percentageResultDisplay.classList.add('text-gray-500');
+                return;
+            }
+            
+            if (isNaN(profitLossAmount)) {
+                percentageResultDisplay.innerText = `0.00 %`;
+                percentageResultDisplay.classList.remove('text-green-500', 'text-red-500');
+                percentageResultDisplay.classList.add('text-gray-500');
+                return;
+            }
+
+            const percentage = (profitLossAmount / initialAmount) * 100;
+            
+            const colorClass = percentage >= 0 ? 'text-green-500' : 'text-red-500';
+            percentageResultDisplay.classList.remove('text-green-500', 'text-red-500', 'text-gray-500');
+            percentageResultDisplay.classList.add(colorClass);
+            
+            percentageResultDisplay.innerText = `${percentage.toFixed(2)} %`;
+        }
+        
+        // ---- Quantity Calculator Function ----
+        function calculateQuantity() {
+            const currentPrice = parseFloat(currentPriceInput.value);
+            const availableCapital = parseFloat(availableCapitalInput.value);
+            
+            if (isNaN(currentPrice) || isNaN(availableCapital) || currentPrice <= 0 || availableCapital <= 0) {
+                quantityResultDisplay.innerText = `الكمية: 0.00000000`;
+                return;
+            }
+            
+            const quantity = availableCapital / currentPrice;
+            quantityResultDisplay.innerText = `الكمية: ${quantity.toFixed(8)}`;
+        }
+
+        // ---- Trading Performance Logic ----
+        // Array to store trade objects
+        let trades = [];
+        let activeTradeIndex = -1;
+        let currentPrice = 0;
+
+        function updateSummary() {
+            const total = trades.filter(t => t.status === 'closed').length;
+            const winning = trades.filter(t => t.result === 'رابحة').length;
+            const losing = trades.filter(t => t.result === 'خاسرة').length;
+            const successRate = total > 0 ? ((winning / total) * 100).toFixed(2) : 0;
+
+            document.getElementById('totalTrades').textContent = total;
+            document.getElementById('winningTrades').textContent = winning;
+            document.getElementById('losingTrades').textContent = losing;
+            document.getElementById('successRate').textContent = `${successRate}%`;
+        }
+
+        function renderTrades() {
+            const tableBody = document.getElementById('tradesTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; // Clear the table first
+
+            trades.forEach(trade => {
+                const newRow = tableBody.insertRow();
+                newRow.className = 'border-b border-gray-700 hover:bg-gray-600';
+
+                // Determine row color based on result or status
+                if (trade.status === 'open') {
+                    newRow.classList.add('open-row');
+                } else if (trade.result === 'رابحة') {
+                    newRow.classList.add('win-row');
+                } else if (trade.result === 'خاسرة') {
+                    newRow.classList.add('loss-row');
+                } else {
+                    newRow.classList.add('inconclusive-row');
+                }
+
+                // Create and add cells
+                const typeCell = newRow.insertCell(0);
+                typeCell.className = 'py-3 px-6 text-right whitespace-nowrap';
+                typeCell.textContent = trade.type === 'buy' ? 'شراء' : 'بيع';
+
+                const entryCell = newRow.insertCell(1);
+                entryCell.className = 'py-3 px-6 text-right whitespace-nowrap';
+                entryCell.textContent = trade.entry;
+
+                const targetCell = newRow.insertCell(2);
+                targetCell.className = 'py-3 px-6 text-right whitespace-nowrap';
+                targetCell.textContent = trade.target;
+
+                const stopLossCell = newRow.insertCell(3);
+                stopLossCell.className = 'py-3 px-6 text-right whitespace-nowrap';
+                stopLossCell.textContent = trade.stopLoss;
+
+                const closingCell = newRow.insertCell(4);
+                closingCell.className = 'py-3 px-6 text-right whitespace-nowrap';
+                closingCell.textContent = trade.closing ? trade.closing : '--';
+
+                const resultCell = newRow.insertCell(5);
+                resultCell.className = 'py-3 px-6 text-right font-medium whitespace-nowrap';
+                resultCell.textContent = trade.result ? trade.result : 'مفتوحة';
+            });
+        }
+
+        function addTrade() {
+            const tradeType = document.getElementById('tradeType').value;
+            const entry = parseFloat(document.getElementById('entryPrice').value);
+            const target = parseFloat(document.getElementById('targetPrice').value);
+            const stopLoss = parseFloat(document.getElementById('stopLossPrice').value);
+
+            if (isNaN(entry) || isNaN(target) || isNaN(stopLoss)) {
+                showMessage('الرجاء إدخال أرقام صحيحة في جميع الحقول.');
+                return;
+            }
+
+            if (activeTradeIndex !== -1) {
+                 showMessage('يجب إغلاق الصفقة الحالية قبل بدء صفقة جديدة.');
+                return;
+            }
+
+            const newTrade = {
+                type: tradeType,
+                entry,
+                target,
+                stopLoss,
+                closing: null,
+                result: null,
+                status: 'open'
+            };
+
+            trades.push(newTrade);
+            activeTradeIndex = trades.length - 1;
+
+            currentPrice = entry;
+            document.getElementById('currentPriceDisplay').textContent = currentPrice;
+
+            renderTrades();
+            document.getElementById('liveTradeSection').classList.remove('hidden');
+
+            document.getElementById('entryPrice').value = '';
+            document.getElementById('targetPrice').value = '';
+            document.getElementById('stopLossPrice').value = '';
+        }
+
+        function updateCurrentPrice(amount) {
+            if (activeTradeIndex === -1) return;
+            currentPrice += amount;
+            document.getElementById('currentPriceDisplay').textContent = currentPrice.toFixed(2);
+            checkTradeResult();
+        }
+
+        function checkTradeResult() {
+            if (activeTradeIndex === -1) return;
+            const trade = trades[activeTradeIndex];
+
+            if (trade.type === 'buy') {
+                if (currentPrice >= trade.target) {
+                    trade.result = 'رابحة';
+                    closeTrade();
+                    showMessage('تم تحقيق الهدف! الصفقة رابحة.');
+                } else if (currentPrice <= trade.stopLoss) {
+                    trade.result = 'خاسرة';
+                    closeTrade();
+                    showMessage('تم الوصول إلى وقف الخسارة! الصفقة خاسرة.');
+                }
+            } else if (trade.type === 'sell') {
+                 if (currentPrice <= trade.target) {
+                    trade.result = 'رابحة';
+                    closeTrade();
+                    showMessage('تم تحقيق الهدف! الصفقة رابحة.');
+                } else if (currentPrice >= trade.stopLoss) {
+                    trade.result = 'خاسرة';
+                    closeTrade();
+                    showMessage('تم الوصول إلى وقف الخسارة! الصفقة خاسرة.');
+                }
+            }
+        }
+
+        function closeTrade() {
+            if (activeTradeIndex === -1) return;
+            const trade = trades[activeTradeIndex];
+            trade.status = 'closed';
+            trade.closing = currentPrice;
+            if (!trade.result) {
+                trade.result = 'غير محسومة';
+            }
+
+            activeTradeIndex = -1;
+            document.getElementById('liveTradeSection').classList.add('hidden');
+
+            renderTrades();
+            updateSummary();
+        }
+
+        function resetData() {
+            trades = [];
+            activeTradeIndex = -1;
+            renderTrades();
+            updateSummary();
+            document.getElementById('liveTradeSection').classList.add('hidden');
+        }
+
+        function showConfirmDialog() {
+            showMessage('هل أنت متأكد من أنك تريد مسح جميع البيانات؟', true, resetData);
+        }
+
+        // ---- Event Listeners to centralize logic and remove inline onclick ----
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            
+            // Daily Profit Calculator
+            calculateBtn.addEventListener('click', calculateProfit);
+            initialCapitalInput.addEventListener('change', (event) => {
+                currentCapital = parseFloat(event.target.value);
+                // Reset daily log and history
+                transactionHistory = [];
+                renderLog();
+                saveData();
+                updateDisplay();
+            });
+
+            // Undo and Clear Buttons
+            undoBtn.addEventListener('click', undoLastTransaction);
+            clearAllBtn.addEventListener('click', showClearConfirmation);
+            exportCsvBtn.addEventListener('click', exportToCsv);
+
+            // Editable Log
+            profitLog.addEventListener('blur', (event) => {
+                const target = event.target;
+                const index = parseInt(target.dataset.index);
+                if (target.classList.contains('editable-profit')) {
+                    updateTransaction(index, target.innerText);
+                } else if (target.classList.contains('editable-date')) {
+                    updateDate(index, target.innerText);
+                }
+            }, true); // Use capture phase for event delegation
+
+            // Mini Calculator
+            calculatorGrid.addEventListener('click', (event) => {
+                const value = event.target.dataset.value;
+                if (value) {
+                    appendToDisplay(value);
+                }
+            });
+            clearCalcBtn.addEventListener('click', clearDisplay);
+            calculateExpressionBtn.addEventListener('click', calculateExpression);
+
+            // Goal Calculator
+            calculateGoalBtn.addEventListener('click', calculateGoal);
+
+            // Trade Profit Calculator
+            buyBtn.addEventListener('click', () => selectTradeType('buy'));
+            sellBtn.addEventListener('click', () => selectTradeType('sell'));
+            calculateTradeBtn.addEventListener('click', calculateTradeResult);
+            
+            // Live updates for trade calculator
+            entryPriceInput.addEventListener('input', calculateTradeResult);
+            exitPriceInput.addEventListener('input', calculateTradeResult);
+            quantityInput.addEventListener('input', calculateTradeResult);
+            leverageInput.addEventListener('input', calculateTradeResult);
+            
+            // Percentage Calculator
+            initialAmountInput.addEventListener('input', calculatePercentage);
+            profitLossAmountInput.addEventListener('input', calculatePercentage);
+            
+            // Quantity Calculator
+            calculateQuantityBtn.addEventListener('click', calculateQuantity);
+            currentPriceInput.addEventListener('input', calculateQuantity);
+            availableCapitalInput.addEventListener('input', calculateQuantity);
+        });
+    </script>
+</body>
+</html>
